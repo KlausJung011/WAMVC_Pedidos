@@ -7,40 +7,100 @@
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/WAMVCPedidos.styles.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/Views/Shared/_Layout.cshtml.css" asp-append-version="true" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" />
+    @await RenderSectionAsync("Styles", required: false)
 </head>
-<body>
-    <header>
-        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
-            <div class="container-fluid">
-                <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">WAMVCPedidos</a>
+<body class="d-flex flex-column min-vh-100">
+    <header class="modern-header">
+        <nav class="navbar navbar-expand-lg">
+            <div class="container">
+                <a class="navbar-brand modern-brand" asp-area="" asp-controller="Home" asp-action="Index">
+                    <div class="brand-content">
+                        <i class="fas fa-tasks brand-icon"></i>
+                        <span class="brand-text">WAMVCPedidos</span>
+                        <small class="brand-subtitle">Gestión de Artesanías</small>
+                    </div>
+                </a>
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
                         aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
                 </button>
-                <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
-                    <ul class="navbar-nav flex-grow-1">
+                <div class="navbar-collapse collapse d-lg-inline-flex justify-content-between">
+                    <ul class="navbar-nav gap-3 ms-5 mt-2 mt-md-0">
                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
+                            <a class="nav-link modern-nav-link" asp-area="" asp-controller="Home" asp-action="Index">
+                                <i class="fas fa-home me-1"></i>
+                                <span>Inicio</span>
+                            </a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+                            <a class="nav-link modern-nav-link" asp-area="" asp-controller="Product" asp-action="Index">
+                                <i class="fas fa-plus-circle me-1"></i>
+                                <span>Productos</span>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link modern-nav-link" asp-area="" asp-controller="User" asp-action="Index">
+                                <i class="fas fa-user-plus me-1"></i>
+                                <span>Usuarios</span>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link modern-nav-link" asp-area="" asp-controller="Order" asp-action="Index">
+                                <i class="fas fa-bag-shopping me-1"></i>
+                                <span>Órdenes</span>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link modern-nav-link" asp-area="" asp-controller="OrderItem" asp-action="Index">
+                                <i class="fas fa-list me-1"></i>
+                                <span>Items</span>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link modern-nav-link" asp-area="" asp-controller="Home" asp-action="Privacy">
+                                <i class="fas fa-shield-alt me-1"></i>
+                                <span>Privacidad</span>
+                            </a>
                         </li>
                     </ul>
                 </div>
             </div>
         </nav>
     </header>
-    <div class="container">
-        <main role="main" class="pb-3">
-            @RenderBody()
-        </main>
-    </div>
 
-    <footer class="border-top footer text-muted">
-        <div class="container">
-            &copy; 2025 - WAMVCPedidos - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+    <main class="flex-fill">
+        <div class="container-fluid py-4">
+            @RenderBody()
+        </div>
+    </main>
+
+    <footer class="modern-footer mt-auto">
+        <div class="footer-content">
+            <div class="container">
+                <div class="row align-items-center">
+                    <div class="col-md-6">
+                        <div class="footer-brand">
+                            <i class="fas fa-tasks me-2"></i>
+                            <strong>WebAppMVC</strong>
+                            <span class="ms-2 text-muted">- Sistema de Gestión de Artesanías</span>
+                        </div>
+                    </div>
+                    <div class="col-md-6 text-md-end">
+                        <div class="footer-links">
+                            <span class="text-muted">&copy; 2025 - Todos los derechos reservados</span>
+                            <span class="mx-2 text-muted">|</span>
+                            <a asp-area="" asp-controller="Home" asp-action="Privacy" class="footer-link">
+                                <i class="fas fa-shield-alt me-1"></i>Política de Privacidad
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
     </footer>
+
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
