@@ -10,7 +10,7 @@ namespace WAMVCPedidos.Models
         [Display(Name = "Nombre del Cliente")]
         [Required(ErrorMessage = "El nombre del cliente es obligatorio")]
         [Range(1, int.MaxValue, ErrorMessage = "El ID de usuario debe ser mayor a 0")]
-        public int IdCliente { get; set; }
+        public int IdUser { get; set; }
 
         [Display(Name = "Fecha de Pedido")]
         [Required(ErrorMessage = "La fecha de entrega es obligatoria")]
@@ -32,9 +32,9 @@ namespace WAMVCPedidos.Models
         public decimal Total { get; set; }
 
         //Una orden pertenece a un solo cliente
-        public UserModel? Cliente { get; set; }
+        public UserModel? User { get; set; }
         //Una orden puede tener muchos items 1-N
-        public ICollection<OrderItemModel>? OrderItems{ get; set; }
+        public ICollection<OrderItemModel>? OrderItems { get; set; }
 
         public static ValidationResult ValidateFechaPedido(DateTime fechaPedido, ValidationContext context)
         {

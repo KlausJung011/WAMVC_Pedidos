@@ -7,14 +7,14 @@ namespace WAMVCPedidos.Models
     {
         public int Id { get; set; }
 
-        [Display(Name = "Fecha de la orden")]
+        [Display(Name = "Orden")]
         [Required(ErrorMessage = "El ID de la orden es obligatorio")]
         [Range(1, int.MaxValue, ErrorMessage = "El ID de pedido debe ser mayor a 0")]
         public int IdOrder { get; set; }
 
         [Display(Name = "Nombre del Producto")]
         [Required(ErrorMessage = "El nombre del producto es obligatorio")]
-        [Range(1, int.MaxValue, ErrorMessage = "El ID de pedido debe ser mayor a 0")]
+        [Range(1, int.MaxValue, ErrorMessage = "El ID de producto debe ser mayor a 0")]
         public int IdProduct { get; set; }
 
         [Display(Name = "Cantidad")]

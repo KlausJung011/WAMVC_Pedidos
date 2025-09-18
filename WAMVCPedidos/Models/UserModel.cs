@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace WAMVCPedidos.Models
 {
@@ -22,7 +23,7 @@ namespace WAMVCPedidos.Models
         [Display(Name = "Contraseña del usuario")]
         [Required(ErrorMessage = "La contraseña es obligatoria")]
         [StringLength(20, MinimumLength = 4, ErrorMessage = "La contraseña debe tener entre 4 y 20 caracteres")]
-        public string? Password { get; set; }
+        public string Password { get; set; }
 
         [Required(ErrorMessage = "El rol es obligatorio")]
         [Display(Name = "Rol")]
