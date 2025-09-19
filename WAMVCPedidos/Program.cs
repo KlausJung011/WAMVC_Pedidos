@@ -1,5 +1,7 @@
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using WAMVCPedidos.Data;
+using WAMVCPedidos.Models;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -8,6 +10,13 @@ builder.Services.AddControllersWithViews();
 
 builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
+
+// Configura Identity ANTES de app.Build()
+builder.Services.AddDefaultIdentity<UserModel>(options => {
+    options.SignIn.RequireConfirmedAccount = false;
+})
+   .AddRoles<IdentityRole<int>>() // Usa IdentityRole<int> para clave int
+   .AddEntityFrameworkStores<AppDbContext>();
 
 var app = builder.Build();
 
@@ -31,3 +40,9 @@ app.MapControllerRoute(
     pattern: "{controller=Home}/{action=Index}/{id?}");
 
 app.Run();
+
+builder.Services.AddDefaultIdentity<UserModel>(options => {
+    options.SignIn.RequireConfirmedAccount = false;
+})
+   .AddRoles<IdentityRole>()
+   .AddEntityFrameworkStores<AppDbContext>();

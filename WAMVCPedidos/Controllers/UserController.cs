@@ -8,7 +8,7 @@ using Microsoft.EntityFrameworkCore;
 using WAMVCPedidos.Data;
 using WAMVCPedidos.Models;
 
-namespace WAMVCPedidos.Views
+namespace WAMVCPedidos.Controllers
 {
     public class UserController : Controller
     {
