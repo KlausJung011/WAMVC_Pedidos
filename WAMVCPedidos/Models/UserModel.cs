@@ -27,11 +27,11 @@ namespace WAMVCPedidos.Models
         [StringLength(20, MinimumLength = 4, ErrorMessage = "La contraseña debe tener entre 4 y 20 caracteres")]
         public string Password { get; set; }*/
 
-        [Required(ErrorMessage = "El rol es obligatorio")]
+        /*[Required(ErrorMessage = "El rol es obligatorio")]
         [Display(Name = "Rol")]
         [StringLength(9, ErrorMessage = "El rol no puede exceder los 9 caracteres")]
         [RegularExpression(@"^(admin|cliente|empleado)$", ErrorMessage = "El rol debe ser admin, cliente o empleado")]
-        public string Rol { get; set; }
+        public string Rol { get; set; }*/
 
         //Un cliente puede tener varias órdenes
         public ICollection<OrderModel>? Orders { get; set; }

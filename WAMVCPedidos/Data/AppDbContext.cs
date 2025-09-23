@@ -1,21 +1,22 @@
-﻿using Microsoft.EntityFrameworkCore;
-using WAMVCPedidos.Models;
+﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore;
+using WAMVCPedidos.Models;
 
 namespace WAMVCPedidos.Data
 {
 
-    public class AppDbContext : IdentityDbContext<UserModel>
+    public class AppDbContext : IdentityDbContext<UserModel, IdentityRole<int>, int>
     {
         public AppDbContext(DbContextOptions<AppDbContext> options) : base(options) { }
 
-        public DbSet<UserModel> Users { get; set; }
         public DbSet<ProductModel> Products { get; set; }
         public DbSet<OrderModel> Orders { get; set; }
         public DbSet<OrderItemModel> OrderItems { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            base.OnModelCreating(modelBuilder);
 
             // Order (N) - (1) User
             modelBuilder.Entity<OrderModel>()

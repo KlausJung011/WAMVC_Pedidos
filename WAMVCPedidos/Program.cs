@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc.Authorization;
 using Microsoft.EntityFrameworkCore;
 using WAMVCPedidos.Data;
 using WAMVCPedidos.Models;
@@ -11,12 +12,28 @@ builder.Services.AddControllersWithViews();
 builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
-// Configura Identity ANTES de app.Build()
-builder.Services.AddDefaultIdentity<UserModel>(options => {
+// Identity con roles (clave int) y reglas de password/email
+builder.Services.AddIdentity<UserModel, IdentityRole<int>>(options =>
+{
     options.SignIn.RequireConfirmedAccount = false;
+    options.User.RequireUniqueEmail = true;
+
+    // Reglas de contraseña personalizables
+    options.Password.RequiredLength = 3;
+    options.Password.RequireDigit = false;
+    options.Password.RequireLowercase = false;
+    options.Password.RequireUppercase = false;
+    options.Password.RequireNonAlphanumeric = false;
 })
-   .AddRoles<IdentityRole<int>>() // Usa IdentityRole<int> para clave int
-   .AddEntityFrameworkStores<AppDbContext>();
+.AddEntityFrameworkStores<AppDbContext>()
+.AddDefaultTokenProviders();
+
+// Rutas de login/denegado (Identity UI)
+builder.Services.ConfigureApplicationCookie(options =>
+{
+    options.LoginPath = "/Identity/Account/Login";
+    options.AccessDeniedPath = "/Identity/Account/AccessDenied";
+});
 
 var app = builder.Build();
 
@@ -33,16 +50,19 @@ app.UseStaticFiles();
 
 app.UseRouting();
 
+// IMPORTANTE: Authentication antes de Authorization
+app.UseAuthentication();
+
 app.UseAuthorization();
 
 app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Home}/{action=Index}/{id?}");
 
-app.Run();
+// Seed de roles/usuario admin
+using (var scope = app.Services.CreateScope())
+{
+    await IdentitySeeder.SeedAsync(scope.ServiceProvider);
+}
 
-builder.Services.AddDefaultIdentity<UserModel>(options => {
-    options.SignIn.RequireConfirmedAccount = false;
-})
-   .AddRoles<IdentityRole>()
-   .AddEntityFrameworkStores<AppDbContext>();
+app.Run();
