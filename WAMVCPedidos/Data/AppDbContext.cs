@@ -5,7 +5,6 @@ using WAMVCPedidos.Models;
 
 namespace WAMVCPedidos.Data
 {
-
     public class AppDbContext : IdentityDbContext<UserModel, IdentityRole<int>, int>
     {
         public AppDbContext(DbContextOptions<AppDbContext> options) : base(options) { }

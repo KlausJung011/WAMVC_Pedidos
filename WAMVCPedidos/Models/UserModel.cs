@@ -1,16 +1,14 @@
-﻿using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
-using Microsoft.AspNetCore.Identity;
+﻿using Microsoft.AspNetCore.Identity;
+using System.ComponentModel.DataAnnotations;
 
 namespace WAMVCPedidos.Models
 {
-    public class UserModel: IdentityUser<int>
+    public class UserModel : IdentityUser<int>
     {
         [Display(Name = "Nombre del usuario")]
         [Required(ErrorMessage = "El nombre es obligatorio")]
         [StringLength(100, MinimumLength = 3, ErrorMessage = "El nombre debe tener entre 3 y 100 caracteres")]
-        //[Remote(action: "CheckNombreUnico", controller: "Clientes", AdditionalFields = nameof(Id), ErrorMessage = "Ya existe un cliente con ese nombre.")]
-        public string Nombre { get; set; }
+        public string? Nombre { get; set; }
 
         // IdentityUser ya maneja el id, email y password
 
