@@ -20,18 +20,35 @@ namespace WAMVCPedidos.Data
 
             // Usuario admin inicial (opcional)
             var adminEmail = "nico@gmail.com";
+            var adminPassword = "Admin123!";
+
             var admin = await userManager.FindByEmailAsync(adminEmail);
+
             if (admin is null)
             {
                 admin = new UserModel
                 {
-                    UserName = "admin",
+                    UserName = adminEmail,
                     Email = adminEmail,
                     EmailConfirmed = true,
-                    Nombre = "Nicolás Vargas"
+                    Nombre = "Nico Vargas"
                 };
-                var result = await userManager.CreateAsync(admin, "123");
+
+                var result = await userManager.CreateAsync(admin, adminPassword);
                 if (result.Succeeded)
+                {
+                    await userManager.AddToRoleAsync(admin, "admin");
+                }
+            }
+            else
+            {
+                // Ajustar si se creó con UserName distinto
+                if (admin.UserName != adminEmail)
+                {
+                    admin.UserName = adminEmail;
+                    await userManager.UpdateAsync(admin);
+                }
+                if (!await userManager.IsInRoleAsync(admin, "admin"))
                 {
                     await userManager.AddToRoleAsync(admin, "admin");
                 }

@@ -1,17 +1,18 @@
 using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Mvc.Authorization;
 using Microsoft.EntityFrameworkCore;
 using WAMVCPedidos.Data;
 using WAMVCPedidos.Models;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
+// MVC + Razor Pages (para la UI de Identity)
 builder.Services.AddControllersWithViews();
 builder.Services.AddRazorPages(); // Necesario para Identity UI
 
 builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
+
+//builder.Services.AddDefaultIdentity<UserModel>(options => options.SignIn.RequireConfirmedAccount = true).AddEntityFrameworkStores<AppDbContext>();
 
 // Identity con roles (clave int) y reglas de password/email
 builder.Services.AddIdentity<UserModel, IdentityRole<int>>(options =>
@@ -19,7 +20,7 @@ builder.Services.AddIdentity<UserModel, IdentityRole<int>>(options =>
     options.SignIn.RequireConfirmedAccount = false;
     options.User.RequireUniqueEmail = true;
 
-    // Reglas de contraseña personalizables
+    // Reglas de contraseï¿½a personalizables
     options.Password.RequiredLength = 3;
     options.Password.RequireDigit = false;
     options.Password.RequireLowercase = false;
@@ -51,16 +52,15 @@ app.UseStaticFiles();
 
 app.UseRouting();
 
-// IMPORTANTE: Authentication antes de Authorization
+// Authentication antes de Authorization
 app.UseAuthentication();
-
 app.UseAuthorization();
 
 app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Home}/{action=Index}/{id?}");
 
-app.MapRazorPages(); // Para las páginas de Identity
+app.MapRazorPages(); // Para las pï¿½ginas de Identity
 
 // Seed de roles y usuario admin
 using (var scope = app.Services.CreateScope())
