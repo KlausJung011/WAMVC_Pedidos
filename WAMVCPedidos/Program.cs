@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.EntityFrameworkCore;
+using System.Globalization;
 using WAMVCPedidos.Data;
 using WAMVCPedidos.Models;
 
@@ -41,6 +42,11 @@ builder.Services.ConfigureApplicationCookie(options =>
 });
 
 var app = builder.Build();
+
+// Forzar cultura en-US para toda la app
+var cultureInfo = new CultureInfo("en-US");
+CultureInfo.DefaultThreadCurrentCulture = cultureInfo;
+CultureInfo.DefaultThreadCurrentUICulture = cultureInfo;
 
 // Configure the HTTP request pipeline.
 if (!app.Environment.IsDevelopment())
