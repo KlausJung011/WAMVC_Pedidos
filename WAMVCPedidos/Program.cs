@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.EntityFrameworkCore;
 using WAMVCPedidos.Data;
 using WAMVCPedidos.Models;
@@ -8,6 +9,8 @@ var builder = WebApplication.CreateBuilder(args);
 // MVC + Razor Pages (para la UI de Identity)
 builder.Services.AddControllersWithViews();
 builder.Services.AddRazorPages(); // Necesario para Identity UI
+
+builder.Services.AddSingleton<IEmailSender, WAMVCPedidos.Services.NoOpEmailSender>();
 
 builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));

@@ -1,0 +1,26 @@
+﻿@model IEnumerable<WAMVCPedidos.Controllers.AdminUsersController.UserListVm>
+@{
+    ViewData["Title"] = "Usuarios";
+}
+<h2>Usuarios</h2>
+<p><a asp-action="Create" class="btn btn-sm btn-primary">Nuevo</a></p>
+<table class="table table-striped">
+    <thead>
+        <tr><th>Usuario</th><th>Nombre</th><th>Email</th><th>Roles</th><th></th></tr>
+    </thead>
+    <tbody>
+        @foreach (var u in Model)
+        {
+            <tr>
+                <td>@u.UserName</td>
+                <td>@u.Nombre</td>
+                <td>@u.Email</td>
+                <td>@string.Join(", ", u.Roles)</td>
+                <td>
+                    <a asp-action="Edit" asp-route-id="@u.Id" class="btn btn-sm btn-outline-secondary">Editar</a>
+                    <a asp-action="Delete" asp-route-id="@u.Id" class="btn btn-sm btn-outline-danger ms-1">Eliminar</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

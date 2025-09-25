@@ -18,9 +18,10 @@ namespace WAMVCPedidos.Data
                     await roleManager.CreateAsync(new IdentityRole<int>(role));
             }
 
-            // Usuario admin inicial (opcional)
+            // Usuario admin inicial, puede ingresar otros datos
             var adminEmail = "nico@gmail.com";
-            var adminPassword = "Admin123!";
+            var adminPassword = "Admin123!"; //Se recomienda usar la misma contraseña
+            var adminNombre = "Nico Vargas";
 
             var admin = await userManager.FindByEmailAsync(adminEmail);
 
@@ -31,7 +32,7 @@ namespace WAMVCPedidos.Data
                     UserName = adminEmail,
                     Email = adminEmail,
                     EmailConfirmed = true,
-                    Nombre = "Nico Vargas"
+                    Nombre = adminNombre
                 };
 
                 var result = await userManager.CreateAsync(admin, adminPassword);
