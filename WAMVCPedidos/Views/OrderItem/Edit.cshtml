@@ -1,49 +1,69 @@
 ﻿@model WAMVCPedidos.Models.OrderItemModel
 
 @{
-    ViewData["Title"] = "Edit";
+    ViewData["Title"] = "Editar Item";
 }
 
-<h1>Edit</h1>
+<div class="container-fluid">
+    <div class="row justify-content-center">
+        <div class="col-lg-8">
+            <div class="card shadow-lg border-0">
+                <div class="card-header bg-warning">
+                    <h2 class="mb-0"><i class="fas fa-pen-to-square me-2"></i>Editar Item</h2>
+                </div>
+                <div class="card-body p-4">
+                    <form asp-action="Edit" method="post">
+                        <div asp-validation-summary="ModelOnly" class="alert alert-danger"></div>
+                        <input type="hidden" asp-for="Id" />
 
-<h4>OrderItemModel</h4>
-<hr />
-<div class="row">
-    <div class="col-md-4">
-        <form asp-action="Edit">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <input type="hidden" asp-for="Id" />
-            <div class="form-group">
-                <label asp-for="IdOrder" class="control-label"></label>
-                <select asp-for="IdOrder" class="form-control" asp-items="ViewBag.IdOrder"></select>
-                <span asp-validation-for="IdOrder" class="text-danger"></span>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group mb-3">
+                                    <label class="form-label fw-bold">Orden</label>
+                                    <select class="form-select form-select-lg" asp-items="ViewBag.IdOrder" disabled></select>
+                                    <input type="hidden" asp-for="IdOrder" />
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group mb-3">
+                                    <label class="form-label fw-bold">Producto</label>
+                                    <select class="form-select form-select-lg" asp-items="ViewBag.IdProduct" disabled></select>
+                                    <input type="hidden" asp-for="IdProduct" />
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-4">
+                                <div class="form-group mb-3">
+                                    <label asp-for="Cantidad" class="form-label fw-bold"></label>
+                                    <input asp-for="Cantidad" class="form-control form-control-lg" min="1" />
+                                    <span asp-validation-for="Cantidad" class="text-danger small"></span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="alert alert-info">
+                            El <strong>subtotal</strong> y el <strong>total del pedido</strong> se recalculan automáticamente al guardar.
+                        </div>
+
+                        <div class="d-grid gap-2 d-md-flex justify-content-md-end mt-4">
+                            <a asp-action="Index" class="btn btn-secondary btn-lg me-md-2">
+                                <i class="fas fa-arrow-left me-1"></i>Volver
+                            </a>
+                            <button type="submit" class="btn btn-warning btn-lg">
+                                <i class="fas fa-save me-1"></i>Guardar Cambios
+                            </button>
+                        </div>
+                    </form>
+                </div>
             </div>
-            <div class="form-group">
-                <label asp-for="IdProduct" class="control-label"></label>
-                <select asp-for="IdProduct" class="form-control" asp-items="ViewBag.IdProduct"></select>
-                <span asp-validation-for="IdProduct" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Cantidad" class="control-label"></label>
-                <input asp-for="Cantidad" class="form-control" />
-                <span asp-validation-for="Cantidad" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Subtotal" class="control-label"></label>
-                <input asp-for="Subtotal" class="form-control" />
-                <span asp-validation-for="Subtotal" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <input type="submit" value="Save" class="btn btn-primary" />
-            </div>
-        </form>
+        </div>
     </div>
 </div>
 
-<div>
-    <a asp-action="Index">Back to List</a>
-</div>
-
 @section Scripts {
-    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
 }

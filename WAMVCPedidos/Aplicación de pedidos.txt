@@ -44,5 +44,4 @@ Implementar autorización -> Roles: admin / cliente / empleado
 Pendientes:
 
 Manejar errores en controlador -> Try/catch y mensajes amigables
-Evitar acceso no autorizado -> Decoradores [Authorize] en controladores
 Sanitizar entradas de usuario -> Evitar inyección de código o SQL
