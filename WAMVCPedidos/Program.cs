@@ -11,7 +11,9 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllersWithViews();
 builder.Services.AddRazorPages(); // Necesario para Identity UI
 
+// Services
 builder.Services.AddSingleton<IEmailSender, WAMVCPedidos.Services.NoOpEmailSender>();
+builder.Services.AddScoped<WAMVCPedidos.Services.OrderService>();
 
 builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));

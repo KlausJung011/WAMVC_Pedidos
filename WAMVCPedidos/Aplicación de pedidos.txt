@@ -1,0 +1,48 @@
+**Aplicación de pedidos**
+
+----------------------------
+Realizados:
+Crear proyecto MVC
+Configurar base de datos -> Crear DB inicial (SQL Server) y conexión en appsettings.json
+Configurar Entity Framework -> Agregar EF Core y scaffolding inicial
+Configurar controladores base -> Crear controlador HomeController y vista Index
+Modificar layout
+Crear modelo User -> Definir entidad con nombre, email, password, rol
+Crear modelo Product -> Nombre, descripción, precio, stock
+Validaciones de producto -> Precios positivos, stock ≥0
+Crear modelo Order -> Cliente, fecha, estado, total
+Crear modelo OrderItem -> Producto, cantidad, subtotal
+Relacionar Order y User -> ForeignKey Cliente
+Relacionar OrderItem y Product -> ForeignKey Producto
+Validar modelos con DataAnnotations -> Required, Range, StringLength
+
+Crear controlador UsersController -> Implementar CRUD básico
+Crear vistas de usuario -> Index, Create, Edit, Details, Delete
+
+Implementar autenticación -> Login / Logout con Identity o manual
+Crear controlador ProductsController -> CRUD productos
+Crear vistas de producto -> Listado, formulario creación y edición
+
+Filtrado y búsqueda -> Por nombre, categoría, rango de precio
+
+Crear controlador OrdersController -> CRUD pedidos
+Crear vistas de pedido -> Listado, detalle, creación rápida
+
+Crear vistas de detalles de pedido -> Mostrar productos y cantidades por pedido
+
+Validar stock -> No permitir pedido si stock insuficiente
+Cambiar estado de pedido -> Pendiente, procesado, enviado, entregado
+Calcular totales automáticamente -> Suma de subtotales de items
+Ajustar stock al crear pedido -> Reducir stock automáticamente
+Crear vistas de detalles de pedido -> Mostrar productos y cantidades por pedido
+
+Evitar acceso no autorizado -> Decoradores [Authorize] en controladores
+Implementar autorización -> Roles: admin / cliente / empleado 
+//Estas 2 últimas se realizaron a medida que se avanzaba con las vistas
+
+----------------------------
+Pendientes:
+
+Manejar errores en controlador -> Try/catch y mensajes amigables
+Evitar acceso no autorizado -> Decoradores [Authorize] en controladores
+Sanitizar entradas de usuario -> Evitar inyección de código o SQL

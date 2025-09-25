@@ -27,9 +27,9 @@ namespace WAMVCPedidos.Models
         [Display(Name = "Precio total")]
         [Required(ErrorMessage = "El total es obligatorio")]
         [Column(TypeName = "decimal(10,2)")]
-        [Range(0.01, 99999999.99, ErrorMessage = "El precio total debe estar entre 0.01 y 99,999,999.99")]
+        [Range(0, 99999999.99, ErrorMessage = "El precio total debe estar entre 0.01 y 99,999,999.99")]
         [RegularExpression(@"^\d{1,8}(\.\d{1,2})?$", ErrorMessage = "Máximo 8 dígitos antes y 2 después del punto decimal")]
-        public decimal Total { get; set; }
+        public decimal Total { get; set; } = 0m;
 
         //Una orden pertenece a un solo cliente
         public UserModel? User { get; set; }

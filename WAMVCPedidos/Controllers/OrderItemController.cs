@@ -2,21 +2,26 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using WAMVCPedidos.Data;
 using WAMVCPedidos.Models;
+using WAMVCPedidos.Services;
 
-namespace WAMVCPedidos.Views
+namespace WAMVCPedidos.Controllers
 {
+    [Authorize(Roles = "admin,empleado")]
     public class OrderItemController : Controller
     {
         private readonly AppDbContext _context;
+        private readonly OrderService _svc;
 
-        public OrderItemController(AppDbContext context)
+        public OrderItemController(AppDbContext context, OrderService svc)
         {
             _context = context;
+            _svc = svc;
         }
 
         // GET: OrderItem
@@ -55,21 +60,22 @@ namespace WAMVCPedidos.Views
         }
 
         // POST: OrderItem/Create
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,IdOrder,IdProduct,Cantidad,Subtotal")] OrderItemModel orderItemModel)
+        public async Task<IActionResult> Create([Bind("IdOrder,IdProduct,Cantidad")] OrderItemModel orderItemModel)
         {
-            if (ModelState.IsValid)
+            // Validar con el servicio (calcula Subtotal y ajusta stock)
+            var (ok, error) = await _svc.AddItemAsync(orderItemModel.IdOrder, orderItemModel.IdProduct, orderItemModel.Cantidad);
+            if (!ok)
             {
-                _context.Add(orderItemModel);
-                await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
+                TempData["Error"] = error;
+                ViewData["IdOrder"] = new SelectList(_context.Orders, "Id", "Estado", orderItemModel.IdOrder);
+                ViewData["IdProduct"] = new SelectList(_context.Products, "Id", "Categoria", orderItemModel.IdProduct);
+                return View(orderItemModel);
             }
-            ViewData["IdOrder"] = new SelectList(_context.Orders, "Id", "Estado", orderItemModel.IdOrder);
-            ViewData["IdProduct"] = new SelectList(_context.Products, "Id", "Categoria", orderItemModel.IdProduct);
-            return View(orderItemModel);
+
+            // Redirige al detalle del pedido para continuar trabajando
+            return RedirectToAction("Details", "Order", new { id = orderItemModel.IdOrder });
         }
 
         // GET: OrderItem/Edit/5
@@ -91,40 +97,26 @@ namespace WAMVCPedidos.Views
         }
 
         // POST: OrderItem/Edit/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,IdOrder,IdProduct,Cantidad,Subtotal")] OrderItemModel orderItemModel)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,IdOrder,IdProduct,Cantidad")] OrderItemModel orderItemModel)
         {
             if (id != orderItemModel.Id)
             {
                 return NotFound();
             }
 
-            if (ModelState.IsValid)
+            // Solo permitimos cambiar cantidad. El servicio ajusta stock y subtotal.
+            var (ok, error) = await _svc.UpdateItemQtyAsync(orderItemModel.Id, orderItemModel.Cantidad);
+            if (!ok)
             {
-                try
-                {
-                    _context.Update(orderItemModel);
-                    await _context.SaveChangesAsync();
-                }
-                catch (DbUpdateConcurrencyException)
-                {
-                    if (!OrderItemModelExists(orderItemModel.Id))
-                    {
-                        return NotFound();
-                    }
-                    else
-                    {
-                        throw;
-                    }
-                }
-                return RedirectToAction(nameof(Index));
+                TempData["Error"] = error;
+                ViewData["IdOrder"] = new SelectList(_context.Orders, "Id", "Estado", orderItemModel.IdOrder);
+                ViewData["IdProduct"] = new SelectList(_context.Products, "Id", "Categoria", orderItemModel.IdProduct);
+                return View(orderItemModel);
             }
-            ViewData["IdOrder"] = new SelectList(_context.Orders, "Id", "Estado", orderItemModel.IdOrder);
-            ViewData["IdProduct"] = new SelectList(_context.Products, "Id", "Categoria", orderItemModel.IdProduct);
-            return View(orderItemModel);
+
+            return RedirectToAction("Details", "Order", new { id = orderItemModel.IdOrder });
         }
 
         // GET: OrderItem/Delete/5
@@ -152,13 +144,16 @@ namespace WAMVCPedidos.Views
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var orderItemModel = await _context.OrderItems.FindAsync(id);
-            if (orderItemModel != null)
-            {
-                _context.OrderItems.Remove(orderItemModel);
-            }
+            // Obtener el pedido para redirigir
+            var item = await _context.OrderItems.AsNoTracking().FirstOrDefaultAsync(i => i.Id == id);
+            int? orderId = item?.IdOrder;
 
-            await _context.SaveChangesAsync();
+            var (ok, error) = await _svc.RemoveItemAsync(id);
+            if (!ok) TempData["Error"] = error;
+
+            if (orderId.HasValue)
+                return RedirectToAction("Details", "Order", new { id = orderId.Value });
+
             return RedirectToAction(nameof(Index));
         }
 
